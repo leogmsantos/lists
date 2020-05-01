@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "614465792893",
+    "firebase_url": "https://lista-de-compras-93ca9.firebaseio.com",
+    "project_id": "lista-de-compras-93ca9",
+    "storage_bucket": "lista-de-compras-93ca9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:614465792893:android:5f59271d0361ee1697ba14",
+        "android_client_info": {
+          "package_name": "br.com.leo.minhalistadecompras"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "614465792893-v3bbc6uvb683qq04ubudmt3s8fkkrtb3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.leo.minhalistadecompras",
+            "certificate_hash": "a967935f141ed318cf2d1767327d0c160fb81f75"
+          }
+        },
+        {
+          "client_id": "614465792893-9jv5hpgkv38c5dvfe5b69bouk0bmtivp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBInfE6siPLPpNqdhXP-f4JGPY-SYriVWM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "614465792893-9jv5hpgkv38c5dvfe5b69bouk0bmtivp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

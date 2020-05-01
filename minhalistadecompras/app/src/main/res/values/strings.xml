@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">minhalistadecompras</string>
+    <string name="facebook_app_id">546004779683620</string>
+    <string name="fb_login_protocol_scheme">fb546004779683620</string>
+</resources>

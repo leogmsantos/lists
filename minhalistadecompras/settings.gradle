@@ -1,0 +1,2 @@
+rootProject.name='minhalistadecompras'
+include ':app'
