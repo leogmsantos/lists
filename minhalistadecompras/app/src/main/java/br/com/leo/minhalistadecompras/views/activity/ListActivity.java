@@ -31,18 +31,23 @@ import br.com.leo.minhalistadecompras.api.MoviesAPI;
 import br.com.leo.minhalistadecompras.api.Rest;
 import br.com.leo.minhalistadecompras.model.FilmeModel;
 import br.com.leo.minhalistadecompras.model.ListaDeComprasModel;
+import br.com.leo.minhalistadecompras.model.ListaDeTarefasModel;
 import br.com.leo.minhalistadecompras.util.StringUtils;
 import br.com.leo.minhalistadecompras.views.adapter.ItemBuyListAdapter;
 import br.com.leo.minhalistadecompras.views.adapter.ItemMovieListAdapter;
+import br.com.leo.minhalistadecompras.views.adapter.ItemTaskListAdapter;
 import br.com.leo.minhalistadecompras.views.dialog.CreateItemDialog;
+import br.com.leo.minhalistadecompras.views.dialog.CreateItemTaskDialog;
 import br.com.leo.minhalistadecompras.views.dialog.LoadingDialog;
+import br.com.leo.minhalistadecompras.views.dialog.RemoveItemDialog;
 
-public class ListActivity extends AppCompatActivity implements CreateItemDialog.DialogItemListener, Rest.RecuperarFilmes {
+public class ListActivity extends AppCompatActivity implements CreateItemDialog.DialogItemListener, Rest.RecuperarFilmes, CreateItemTaskDialog.DialogItemListener, ItemTaskListAdapter.TaskListener {
 
-    private TextView tvTitulo, tvDescricao, tvSemLista;
+    private TextView tvTitulo, tvDescricao, tvSemLista, tvFinalizarTarefa;
     private String titulo, descricao, categoria;
     private Button btnAdditem, btnSearch;
     private FloatingActionButton btnNewItem;
+    private ImageView done;
 
     private RecyclerView recyclerItens;
     private RecyclerView.Adapter mAdapter;
@@ -52,6 +57,7 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
 
     private List<ListaDeComprasModel> listaDeCompras = new ArrayList<>();
     private List<FilmeModel> listaDeFilmes = new ArrayList<>();
+    private List<ListaDeTarefasModel> listaDeTarefas = new ArrayList<>();
 
     private int LAUNCH_SECOND_ACTIVITY = 1;
 
@@ -72,6 +78,8 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
         btnAdditem = findViewById(R.id.btnAdditem);
         btnNewItem = findViewById(R.id.btnNewItem);
         btnSearch = findViewById(R.id.btnSearch);
+        done = findViewById(R.id.ivDone);
+        tvFinalizarTarefa = findViewById(R.id.tvFinalizarTarefas);
 
         getExtras();
         recyclerSetup();
@@ -112,6 +120,9 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
             case AppGeral.LISTA_DE_FILMES:
                 recyclerMovieList();
                 break;
+            case AppGeral.LISTA_DE_TAREFAS:
+                recylerTaskList();
+                break;
         }
     }
 
@@ -131,6 +142,14 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
         recyclerItens.setAdapter(mAdapter);
     }
 
+    private void recylerTaskList(){
+        layoutManager = new LinearLayoutManager(this);
+        recyclerItens.setLayoutManager(layoutManager);
+        recyclerItens.setHasFixedSize(true);
+        mAdapter = new ItemTaskListAdapter(listaDeTarefas, this);
+        recyclerItens.setAdapter(mAdapter);
+    }
+
     private void validateList(){
         if (!listaDeCompras.isEmpty()){
             tvSemLista.setVisibility(View.GONE);
@@ -140,6 +159,13 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
         }
 
         if (!listaDeFilmes.isEmpty()){
+            tvSemLista.setVisibility(View.GONE);
+            btnAdditem.setVisibility(View.GONE);
+            recyclerItens.setVisibility(View.VISIBLE);
+            btnNewItem.setVisibility(View.VISIBLE);
+        }
+
+        if (!listaDeTarefas.isEmpty()){
             tvSemLista.setVisibility(View.GONE);
             btnAdditem.setVisibility(View.GONE);
             recyclerItens.setVisibility(View.VISIBLE);
@@ -160,6 +186,7 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
                         startActivityForResult(i, LAUNCH_SECOND_ACTIVITY);
                         break;
                     case AppGeral.LISTA_DE_TAREFAS:
+                        openCreateItemTaskDialog();
                         break;
                 }
             }
@@ -177,6 +204,7 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
                         startActivityForResult(i, LAUNCH_SECOND_ACTIVITY);
                         break;
                     case AppGeral.LISTA_DE_TAREFAS:
+                        openCreateItemTaskDialog();
                         break;
                 }
             }
@@ -186,6 +214,11 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
     private void openCreateItemDialog() {
         CreateItemDialog dialog = new CreateItemDialog();
         dialog.show(getSupportFragmentManager(), "Dialog de Item");
+    }
+
+    private void openCreateItemTaskDialog(){
+        CreateItemTaskDialog dialog = new CreateItemTaskDialog();
+        dialog.show(getSupportFragmentManager(), "Dialog Task");
     }
 
     private void openLoadingDialog(){
@@ -227,4 +260,25 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
             }
         }
     }
+
+    @Override
+    public void criarTarefa(String nomeTarefa) {
+        ListaDeTarefasModel listaDeTarefas = new ListaDeTarefasModel();
+        listaDeTarefas.setNomeTarefa(nomeTarefa);
+        this.listaDeTarefas.add(listaDeTarefas);
+        mAdapter.notifyDataSetChanged();
+        validateList();
+    }
+
+    @Override
+    public void isChecked(Boolean listener) {
+        if (listener == true){
+            tvFinalizarTarefa.setVisibility(View.VISIBLE);
+            done.setVisibility(View.VISIBLE);
+        }else{
+            tvFinalizarTarefa.setVisibility(View.GONE);
+            done.setVisibility(View.GONE);
+        }
+    }
+
 }

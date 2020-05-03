@@ -52,6 +52,7 @@ public class CreateTaskListDialog extends AppCompatDialogFragment {
                 Intent i = new Intent(getContext(), ListActivity.class);
                 i.putExtra(AppGeral.TITULO_LISTA, titulo);
                 i.putExtra(AppGeral.DESCRICAO_LISTA, descricao);
+                i.putExtra(AppGeral.CATEGORIA, AppGeral.LISTA_DE_TAREFAS);
                 startActivity(i);
             }
         });
