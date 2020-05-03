@@ -27,15 +27,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginEnd="220dp"
-        android:layout_marginRight="220dp"
         android:fontFamily="@font/futuraweb"
-        android:text="Título da Tarefa"
+        android:text="Buscar as crianças na escola"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/finalizarTarefa"
         app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.523" />
 
     <RadioButton
         android:id="@+id/finalizarTarefa"

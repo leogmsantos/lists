@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import br.com.leo.minhalistadecompras.AppGeral;
 import br.com.leo.minhalistadecompras.R;
 import br.com.leo.minhalistadecompras.model.ListaDeComprasModel;
 import br.com.leo.minhalistadecompras.model.ListaDeTarefasModel;
@@ -55,13 +56,15 @@ public class ItemTaskListAdapter extends RecyclerView.Adapter<ItemTaskListAdapte
                     holder.constraintTask.setBackground(ContextCompat.getDrawable(itemView.getContext(),R.drawable.shape));
                     holder.finalizarTarefa.setChecked(false);
                     holder.finalizarTarefa.setActivated(false);
-                    listener.isChecked(false);
+                    listaDeTarefas.get(position).setStatusTarefa(AppGeral.NAO_FINALIZADO);
+                    listener.isChecked(false, listaDeTarefas);
                 }else{
                     holder.constraintTask.setBackground(ContextCompat.getDrawable(itemView.getContext(),R.drawable.shape_green));
                     holder.finalizarTarefa.setChecked(true);
                     holder.finalizarTarefa.setActivated(true);
+                    listaDeTarefas.get(position).setStatusTarefa(AppGeral.FINALIZADO);
                     listener = (TaskListener) context;
-                    listener.isChecked(true);
+                    listener.isChecked(true, listaDeTarefas);
                 }
             }
         });
@@ -110,6 +113,6 @@ public class ItemTaskListAdapter extends RecyclerView.Adapter<ItemTaskListAdapte
     }
 
     public interface TaskListener{
-        void isChecked(Boolean listener);
+        void isChecked(Boolean listener, List<ListaDeTarefasModel> listaDeTarefasModels);
     }
 }

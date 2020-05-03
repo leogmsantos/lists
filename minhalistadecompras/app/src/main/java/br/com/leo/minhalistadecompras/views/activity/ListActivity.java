@@ -130,7 +130,7 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
         layoutManager = new LinearLayoutManager(this);
         recyclerItens.setLayoutManager(layoutManager);
         recyclerItens.setHasFixedSize(true);
-        mAdapter = new ItemBuyListAdapter(listaDeCompras);
+        mAdapter = new ItemBuyListAdapter(listaDeCompras, this);
         recyclerItens.setAdapter(mAdapter);
     }
 
@@ -265,20 +265,31 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
     public void criarTarefa(String nomeTarefa) {
         ListaDeTarefasModel listaDeTarefas = new ListaDeTarefasModel();
         listaDeTarefas.setNomeTarefa(nomeTarefa);
+        listaDeTarefas.setStatusTarefa(AppGeral.NAO_FINALIZADO);
         this.listaDeTarefas.add(listaDeTarefas);
         mAdapter.notifyDataSetChanged();
         validateList();
     }
 
     @Override
-    public void isChecked(Boolean listener) {
-        if (listener == true){
+    public void isChecked(Boolean listener, List<ListaDeTarefasModel> listaDeTarefasModels) {
+        Boolean isDone = false;
+
+        for (int i = 0; i < listaDeTarefasModels.size(); i++) {
+            System.out.println(listaDeTarefasModels.get(i).getStatusTarefa());
+            if (listaDeTarefasModels.get(i).getStatusTarefa().equals(AppGeral.FINALIZADO)) {
+                isDone = true;
+            }
+        }
+
+        if (listener == true || isDone == true){
             tvFinalizarTarefa.setVisibility(View.VISIBLE);
             done.setVisibility(View.VISIBLE);
         }else{
             tvFinalizarTarefa.setVisibility(View.GONE);
             done.setVisibility(View.GONE);
         }
+
     }
 
 }

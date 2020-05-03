@@ -10,4 +10,8 @@ public class AppGeral {
     public static final String LISTA_DE_TAREFAS = "TAREFAS";
     public static final String LISTA_DE_FILMES = "FILMES";
     public static final String ITEM_FILME = "FILME";
+
+    //Task
+    public static final String FINALIZADO = "FINALIZADO";
+    public static final String NAO_FINALIZADO = "NAO_FINALIZADO";
 }
