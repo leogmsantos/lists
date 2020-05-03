@@ -138,7 +138,7 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
         layoutManager = new LinearLayoutManager(this);
         recyclerItens.setLayoutManager(layoutManager);
         recyclerItens.setHasFixedSize(true);
-        mAdapter = new ItemMovieListAdapter(listaDeFilmes);
+        mAdapter = new ItemMovieListAdapter(listaDeFilmes, this);
         recyclerItens.setAdapter(mAdapter);
     }
 
