@@ -1,8 +1,11 @@
 package br.com.leo.minhalistadecompras.model;
 
+import com.google.firebase.database.DatabaseReference;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+
+import br.com.leo.minhalistadecompras.helper.ConfiguracaoFirebase;
 
 public class FilmeModel implements Serializable {
 
@@ -16,6 +19,16 @@ public class FilmeModel implements Serializable {
     private String overview;
     @SerializedName("release_date")
     private String relreaseDate;
+    private String id;
+    private String idUsuario;
+    private String titulo, descricao;
+
+    public FilmeModel() {
+        DatabaseReference databaseReference = ConfiguracaoFirebase.getReferenciaFirebase();
+        DatabaseReference movieRef = databaseReference.child("filmes");
+        String idFilme = movieRef.push().getKey();
+        setId(idFilme);
+    }
 
     private String imagePath = "https://image.tmdb.org/t/p/w220_and_h330_face/";
 
@@ -57,5 +70,47 @@ public class FilmeModel implements Serializable {
 
     public void setRelreaseDate(String relreaseDate) {
         this.relreaseDate = relreaseDate;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(String idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public boolean saveMovieOnFirebase(){
+        DatabaseReference firebaseRef = ConfiguracaoFirebase.getReferenciaFirebase();
+        DatabaseReference movieRef = firebaseRef.child("filmes").
+                child(getIdUsuario())
+                .child(getTitulo())
+                .child(getId());
+        movieRef.setValue(this);
+        return true;
     }
 }

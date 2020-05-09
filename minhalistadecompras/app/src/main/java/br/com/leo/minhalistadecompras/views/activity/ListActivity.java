@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -183,6 +184,8 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
                         break;
                     case AppGeral.LISTA_DE_FILMES:
                         Intent i = new Intent(ListActivity.this, MovieSearchActivity.class);
+                        i.putExtra("titulo", titulo);
+                        i.putExtra("descricao", descricao);
                         startActivityForResult(i, LAUNCH_SECOND_ACTIVITY);
                         break;
                     case AppGeral.LISTA_DE_TAREFAS:
@@ -201,6 +204,8 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
                         break;
                     case AppGeral.LISTA_DE_FILMES:
                         Intent i = new Intent(ListActivity.this, MovieSearchActivity.class);
+                        i.putExtra("titulo", titulo);
+                        i.putExtra("descricao", descricao);
                         startActivityForResult(i, LAUNCH_SECOND_ACTIVITY);
                         break;
                     case AppGeral.LISTA_DE_TAREFAS:
@@ -229,8 +234,12 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
     @Override
     public void criarProduto(String nomeProduto, String valorProduto) {
         ListaDeComprasModel listaDeComprasModel = new ListaDeComprasModel();
+        listaDeComprasModel.setUserId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        listaDeComprasModel.setTitulo(titulo);
+        listaDeComprasModel.setDescricao(descricao);
         listaDeComprasModel.setProduto(nomeProduto);
         listaDeComprasModel.setValor(Double.valueOf(valorProduto));
+        listaDeComprasModel.saveBuyListOnFirebase();
         listaDeCompras.add(listaDeComprasModel);
         mAdapter.notifyDataSetChanged();
         validateList();
@@ -266,6 +275,10 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
         ListaDeTarefasModel listaDeTarefas = new ListaDeTarefasModel();
         listaDeTarefas.setNomeTarefa(nomeTarefa);
         listaDeTarefas.setStatusTarefa(AppGeral.NAO_FINALIZADO);
+        listaDeTarefas.setUserId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        listaDeTarefas.setTitulo(titulo);
+        listaDeTarefas.setDescricaoTarefa(descricao);
+        listaDeTarefas.saveBuyListOnFirebase();
         this.listaDeTarefas.add(listaDeTarefas);
         mAdapter.notifyDataSetChanged();
         validateList();

@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class MovieSearchActivity extends AppCompatActivity implements Rest.Recup
     private RecyclerView.LayoutManager layoutManager;
     private ItemMovieListSearchedAdapter mAdapter;
     private Rest rest = new Rest(this);
+    private String titulo, descricao;
 
 
     @Override
@@ -42,6 +45,7 @@ public class MovieSearchActivity extends AppCompatActivity implements Rest.Recup
 
         recyclerSetup();
         onSearch();
+        getExtras();
     }
 
     private void recyclerSetup(){
@@ -51,6 +55,11 @@ public class MovieSearchActivity extends AppCompatActivity implements Rest.Recup
         mAdapter = new ItemMovieListSearchedAdapter(filmes, this);
         recyclerView.setAdapter(mAdapter);
 
+    }
+
+    private void getExtras(){
+        titulo = getIntent().getStringExtra("titulo");
+        descricao = getIntent().getStringExtra("descricao");
     }
 
     private void onSearch(){
@@ -79,6 +88,10 @@ public class MovieSearchActivity extends AppCompatActivity implements Rest.Recup
     @Override
     public void onItemClickListener(FilmeModel filme) {
         FilmeModel filmeSelecionado = filme;
+        filmeSelecionado.setIdUsuario(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        filmeSelecionado.setTitulo(titulo);
+        filmeSelecionado.setDescricao(descricao);
+        filmeSelecionado.saveMovieOnFirebase();
         filmes.add(filmeSelecionado);
         Intent i = new Intent();
         i.putExtra(AppGeral.ITEM_FILME, filme);

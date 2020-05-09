@@ -15,15 +15,20 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 
 import br.com.leo.minhalistadecompras.AppGeral;
 import br.com.leo.minhalistadecompras.R;
+import br.com.leo.minhalistadecompras.helper.ConfiguracaoFirebase;
+import br.com.leo.minhalistadecompras.model.User;
 
 public class SignInActivity extends AppCompatActivity {
 
     private EditText edtEmail, edtPassword, edtRepeatedPassword;
     private Button btnSignIn;
     private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private User user;
+    public static String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +70,24 @@ public class SignInActivity extends AppCompatActivity {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+                user = new User();
+                userId = task.getResult().getUser().getUid();
+                user.setId(userId);
+                user.setEmail(email);
+                user.setSenha(password);
+                user.saveUserOnDatabase();
+
                 FirebaseUser user = auth.getCurrentUser();
                 Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
+                intent.putExtra("user", userId);
                 intent.putExtra(AppGeral.USER, user);
+
                 startActivity(intent);
             }
         });
+    }
+
+    public static String getUserId() {
+        return userId;
     }
 }

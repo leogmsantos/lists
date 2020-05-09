@@ -43,6 +43,8 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseUser user;
     private AccessToken accessToken = AccessToken.getCurrentAccessToken();
     private FirebaseAuth firebaseAuth;
+    private String userId;
+    private String email, password;
 
     private Intent intent;
 
@@ -134,21 +136,23 @@ public class LoginActivity extends AppCompatActivity {
         btnEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = edtLogin.getText().toString();
-                String password = edtLogin.getText().toString();
+                email = edtLogin.getText().toString();
+                password = edtSenha.getText().toString();
 
                 if (!email.isEmpty() && !password.isEmpty()){
                     firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            goToHomeActivity();
+                            if(task.isSuccessful()){
+                                goToHomeActivity();
+                            }else{
+
+                            }
                         }
                     });
                 }
             }
         });
-
-
 
     }
 
