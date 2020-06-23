@@ -1,6 +1,7 @@
 package br.com.leo.minhalistadecompras.views.dialog;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,6 +23,12 @@ public class CreateBuyListDialog extends AppCompatDialogFragment {
     private EditText tituloLista, descricaoLista;
     private Button btnCriarLista;
     private View view;
+    private Context context;
+
+    public CreateBuyListDialog(Context context) {
+        this.context = context;
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

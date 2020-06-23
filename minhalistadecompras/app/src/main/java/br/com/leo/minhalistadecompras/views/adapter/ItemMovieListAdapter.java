@@ -82,4 +82,6 @@ public class ItemMovieListAdapter extends RecyclerView.Adapter<ItemMovieListAdap
             constraintMovie = itemView.findViewById(R.id.constraintMovie);
         }
     }
+
+
 }

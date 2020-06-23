@@ -49,6 +49,7 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
     private Button btnAdditem, btnSearch;
     private FloatingActionButton btnNewItem;
     private ImageView done;
+    private String activity;
 
     private RecyclerView recyclerItens;
     private RecyclerView.Adapter mAdapter;
@@ -97,7 +98,7 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
         titulo = getIntent().getExtras().getString(AppGeral.TITULO_LISTA);
         descricao = getIntent().getExtras().getString(AppGeral.DESCRICAO_LISTA);
         categoria = getIntent().getExtras().getString(AppGeral.CATEGORIA);
-
+        activity = getIntent().getExtras().getString(AppGeral.ACTIVITY);
 
         if (titulo != null){
             tvTitulo.setText(StringUtils.toCamelCase(titulo));
@@ -111,6 +112,21 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
             tvDescricao.setText("");
         }
 
+        if (activity != null){
+            if (activity.equals(AppGeral.ITEM_LIST_ADAPTER)){
+                switch (categoria){
+                    case AppGeral.LISTA_DE_COMRAS:
+                        listaDeCompras = (List<ListaDeComprasModel>) getIntent().getExtras().getSerializable(AppGeral.LISTA_DE_COMRAS);
+                        break;
+                    case AppGeral.LISTA_DE_TAREFAS:
+                        listaDeTarefas = (List<ListaDeTarefasModel>)getIntent().getExtras().getSerializable(AppGeral.LISTA_DE_TAREFAS);
+                        break;
+                    case AppGeral.LISTA_DE_FILMES:
+                        listaDeFilmes = (List<FilmeModel>) getIntent().getExtras().getSerializable(AppGeral.LISTA_DE_FILMES);
+                        break;
+                }
+            }
+        }
     }
 
     private void recyclerSetup(){
@@ -152,25 +168,61 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
     }
 
     private void validateList(){
-        if (!listaDeCompras.isEmpty()){
-            tvSemLista.setVisibility(View.GONE);
-            btnAdditem.setVisibility(View.GONE);
-            recyclerItens.setVisibility(View.VISIBLE);
-            btnNewItem.setVisibility(View.VISIBLE);
+        if (listaDeCompras == null){
+            listaDeCompras = new ArrayList<>();
+            if (!listaDeCompras.isEmpty()){
+                tvSemLista.setVisibility(View.GONE);
+                btnAdditem.setVisibility(View.GONE);
+                recyclerItens.setVisibility(View.VISIBLE);
+                btnNewItem.setVisibility(View.VISIBLE);
+            }
+        }else{
+            if (!listaDeCompras.isEmpty()){
+                tvSemLista.setVisibility(View.GONE);
+                btnAdditem.setVisibility(View.GONE);
+                recyclerItens.setVisibility(View.VISIBLE);
+                btnNewItem.setVisibility(View.VISIBLE);
+            }
         }
 
-        if (!listaDeFilmes.isEmpty()){
-            tvSemLista.setVisibility(View.GONE);
-            btnAdditem.setVisibility(View.GONE);
-            recyclerItens.setVisibility(View.VISIBLE);
-            btnNewItem.setVisibility(View.VISIBLE);
+        if (listaDeFilmes == null){
+            listaDeFilmes = new ArrayList<>();
+            if(!listaDeFilmes.isEmpty()){
+                if (!listaDeFilmes.isEmpty()){
+                    tvSemLista.setVisibility(View.GONE);
+                    btnAdditem.setVisibility(View.GONE);
+                    recyclerItens.setVisibility(View.VISIBLE);
+                    btnNewItem.setVisibility(View.VISIBLE);
+                }
+            }
+        }else{
+            if (!listaDeFilmes.isEmpty()){
+                tvSemLista.setVisibility(View.GONE);
+                btnAdditem.setVisibility(View.GONE);
+                recyclerItens.setVisibility(View.VISIBLE);
+                btnNewItem.setVisibility(View.VISIBLE);
+            }
         }
 
-        if (!listaDeTarefas.isEmpty()){
-            tvSemLista.setVisibility(View.GONE);
-            btnAdditem.setVisibility(View.GONE);
-            recyclerItens.setVisibility(View.VISIBLE);
-            btnNewItem.setVisibility(View.VISIBLE);
+        if (listaDeTarefas == null){
+            listaDeTarefas = new ArrayList<>();
+            if (!listaDeTarefas.isEmpty()){
+                if (!listaDeTarefas.isEmpty()){
+                    tvSemLista.setVisibility(View.GONE);
+                    btnAdditem.setVisibility(View.GONE);
+                    recyclerItens.setVisibility(View.VISIBLE);
+                    btnNewItem.setVisibility(View.VISIBLE);
+                }
+            }
+        }else{
+            if (!listaDeTarefas.isEmpty()){
+                if (!listaDeTarefas.isEmpty()){
+                    tvSemLista.setVisibility(View.GONE);
+                    btnAdditem.setVisibility(View.GONE);
+                    recyclerItens.setVisibility(View.VISIBLE);
+                    btnNewItem.setVisibility(View.VISIBLE);
+                }
+            }
         }
     }
 
@@ -302,7 +354,11 @@ public class ListActivity extends AppCompatActivity implements CreateItemDialog.
             tvFinalizarTarefa.setVisibility(View.GONE);
             done.setVisibility(View.GONE);
         }
-
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

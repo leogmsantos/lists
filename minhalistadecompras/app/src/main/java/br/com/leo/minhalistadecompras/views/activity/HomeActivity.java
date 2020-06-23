@@ -2,6 +2,7 @@ package br.com.leo.minhalistadecompras.views.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,6 +33,7 @@ import br.com.leo.minhalistadecompras.R;
 import br.com.leo.minhalistadecompras.helper.ConfiguracaoFirebase;
 import br.com.leo.minhalistadecompras.model.FilmeModel;
 import br.com.leo.minhalistadecompras.model.ListaDeComprasModel;
+import br.com.leo.minhalistadecompras.model.ListaDeTarefasModel;
 import br.com.leo.minhalistadecompras.model.ListaModel;
 import br.com.leo.minhalistadecompras.model.User;
 import br.com.leo.minhalistadecompras.views.adapter.ItemBuyListAdapter;
@@ -53,9 +55,10 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private List<ListaModel> lista = new ArrayList();
     private ProgressBar progressHome;
+    private ItemListAdapter adapter = new ItemListAdapter(lista, this);
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
@@ -125,12 +128,12 @@ public class HomeActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerHome.setLayoutManager(layoutManager);
         recyclerHome.setHasFixedSize(true);
-        mAdapter = new ItemListAdapter(lista, this);
+        mAdapter = adapter;
         recyclerHome.setAdapter(mAdapter);
     }
 
     private void openBuysListDialog() {
-        CreateBuyListDialog listDialog = new CreateBuyListDialog();
+        CreateBuyListDialog listDialog = new CreateBuyListDialog(this);
         listDialog.show(getSupportFragmentManager(), "Create List Dialog");
     }
 
@@ -154,13 +157,15 @@ public class HomeActivity extends AppCompatActivity {
          buyReference.addListenerForSingleValueEvent(new ValueEventListener() {
              @Override
              public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                 ListaModel listaModel = new ListaModel();
                  for (DataSnapshot ds : dataSnapshot.getChildren()){
+                     ListaModel listaModel = new ListaModel();
                      ListaDeComprasModel compras = ds.getValue(ListaDeComprasModel.class);
                      listaModel.setCategoria(AppGeral.LISTA_DE_COMRAS);
                      listaModel.setIdLista(compras.getId());
                      listaModel.setTitulo(ds.getKey());
                      lista.add(listaModel);
+                     adapter.updateList(lista);
+                     Log.i("Okarin", ds.getKey());
                  }
                  mAdapter.notifyDataSetChanged();
              }
@@ -174,11 +179,11 @@ public class HomeActivity extends AppCompatActivity {
          taskReference.addListenerForSingleValueEvent(new ValueEventListener() {
              @Override
              public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                 ListaModel listaModel = new ListaModel();
                  for (DataSnapshot ds : dataSnapshot.getChildren()){
-                     ListaDeComprasModel compras = ds.getValue(ListaDeComprasModel.class);
+                     ListaModel listaModel = new ListaModel();
+                     ListaDeTarefasModel tarefas = ds.getValue(ListaDeTarefasModel.class);
                      listaModel.setCategoria(AppGeral.LISTA_DE_TAREFAS);
-                     listaModel.setIdLista(compras.getId());
+                     listaModel.setIdLista(tarefas.getId());
                      listaModel.setTitulo(ds.getKey());
                      lista.add(listaModel);
                  }
@@ -192,13 +197,13 @@ public class HomeActivity extends AppCompatActivity {
          });
 
          movieReference.addListenerForSingleValueEvent(new ValueEventListener() {
-             ListaModel listaModel = new ListaModel();
              @Override
              public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                  for (DataSnapshot ds : dataSnapshot.getChildren()){
-                     ListaDeComprasModel compras = ds.getValue(ListaDeComprasModel.class);
+                     ListaModel listaModel = new ListaModel();
+                     FilmeModel filme = ds.getValue(FilmeModel.class);
                      listaModel.setCategoria(AppGeral.LISTA_DE_FILMES);
-                     listaModel.setIdLista(compras.getId());
+                     listaModel.setIdLista(filme.getId());
                      listaModel.setTitulo(ds.getKey());
                      lista.add(listaModel);
                  }
@@ -218,5 +223,12 @@ public class HomeActivity extends AppCompatActivity {
         super.onStart();
         user = mAuth.getCurrentUser();
         recuperarListasCadastradas(user);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        lista.clear();
+        mAdapter.notifyDataSetChanged();
     }
 }

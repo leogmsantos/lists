@@ -1,6 +1,8 @@
 package br.com.leo.minhalistadecompras.model;
 
-public class ListaModel {
+import java.io.Serializable;
+
+public class ListaModel implements Serializable {
 
     private String titulo;
     private String categoria;

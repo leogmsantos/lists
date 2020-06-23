@@ -6,10 +6,12 @@ public class AppGeral {
     public static final String TITULO_LISTA = "TITULO";
     public static final String DESCRICAO_LISTA = "DESCRICAO";
     public static final String CATEGORIA = "CATEGORIA";
-    public static final String LISTA_DE_COMRAS = "COMPRAS";
-    public static final String LISTA_DE_TAREFAS = "TAREFAS";
-    public static final String LISTA_DE_FILMES = "FILMES";
+    public static final String LISTA_DE_COMRAS = "compras";
+    public static final String LISTA_DE_TAREFAS = "tarefas";
+    public static final String LISTA_DE_FILMES = "filmes";
     public static final String ITEM_FILME = "FILME";
+    public static final String ACTIVITY = "ACTIVITY";
+    public static final String ITEM_LIST_ADAPTER = "ItemListAdapter";
 
     //Task
     public static final String FINALIZADO = "FINALIZADO";

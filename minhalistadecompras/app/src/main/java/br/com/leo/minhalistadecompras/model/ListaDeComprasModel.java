@@ -2,9 +2,11 @@ package br.com.leo.minhalistadecompras.model;
 
 import com.google.firebase.database.DatabaseReference;
 
+import java.io.Serializable;
+
 import br.com.leo.minhalistadecompras.helper.ConfiguracaoFirebase;
 
-public class ListaDeComprasModel {
+public class ListaDeComprasModel implements Serializable {
 
     private String id;
     private String userId;
